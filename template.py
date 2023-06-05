@@ -8,7 +8,7 @@ logging.basicConfig(level = logging.INFO, format = "[%(asctime)s]: %(message)s")
 
 
 # project name
-project_name = "cnn_classifier"
+project_name = "chicken_disease_classification"
 
 # list of directories of the project
 # NOTE: .gitkeep  --> where an empty folder needs to be tracked via Git.
@@ -27,7 +27,8 @@ list_of_files = [
     "params.yaml",
     "requirements.txt",
     "setup.py",
-    "research/trails.ipynb"
+    "research/trails.ipynb",
+    "templates/index.html"
 ]
 
 
