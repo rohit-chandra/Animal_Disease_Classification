@@ -1,6 +1,6 @@
 from chicken_disease_classification.constants import *
 from chicken_disease_classification.utils.common import read_yaml, create_directories
-from chicken_disease_classification.entity.config_entity import (DataIngestionConfig, BaseModelConfig, CallbacksConfig)
+from chicken_disease_classification.entity.config_entity import (DataIngestionConfig, BaseModelConfig, CallbacksConfig, TrainingConfig)
 import os
 
 class ConfigurationManager:
@@ -71,3 +71,29 @@ class ConfigurationManager:
         )
         
         return callbacks_config_obj
+    
+    
+    
+    def get_training_config(self) -> TrainingConfig:
+        training = self.config_file_path.training
+        base_model = self.config_file_path.base_model
+        params = self.params_file_path
+        training_data = os.path.join(self.config_file_path.data_ingestion.unzip_dir, "Chicken-fecal-images")
+        
+        # create root directory for training
+        create_directories([Path(training.root_dir)])
+        
+        training_config_obj = TrainingConfig(
+            root_dir = Path(training.root_dir),
+            trained_model_dir = Path(training.trained_model_dir),
+            updated_base_model_dir = Path(base_model.updated_base_model_path),
+            training_data = Path(training_data),
+            params_epochs = params.EPOCHS,
+            params_batch_size = params.BATCH_SIZE,
+            params_is_augmentation = params.AUGMENTATION,
+            params_image_size = params.IMAGE_SIZE
+        )
+        
+        return training_config_obj
+    
+    
