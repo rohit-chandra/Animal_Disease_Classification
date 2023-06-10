@@ -1,6 +1,6 @@
 from chicken_disease_classification.constants import *
 from chicken_disease_classification.utils.common import read_yaml, create_directories
-from chicken_disease_classification.entity.config_entity import DataIngestionConfig
+from chicken_disease_classification.entity.config_entity import (DataIngestionConfig, BaseModelConfig)
 
 class ConfigurationManager:
     def __init__(
@@ -31,3 +31,24 @@ class ConfigurationManager:
         )
         
         return data_ingestion_config
+    
+    
+    def get_base_model_config(self) -> BaseModelConfig:
+
+        base_model_config = self.config_file_path.base_model
+        # create a sub directory in artifacts -> "base_model"
+        create_directories([base_model_config.root_dir])
+
+        # create obj of BaseModelConfig class
+        base_model_config_obj = BaseModelConfig(
+            root_dir = Path(base_model_config.root_dir),
+            base_model_path = Path(base_model_config.base_model_path),
+            updated_base_model_path = Path(base_model_config.updated_base_model_path),
+            params_image_size = self.params_file_path.IMAGE_SIZE,
+            params_learning_rate = self.params_file_path.LEARNING_RATE,
+            params_include_top = self.params_file_path.INCLUDE_TOP,
+            params_weights = self.params_file_path.WEIGHTS,
+            params_classes = self.params_file_path.CLASSES
+        )
+        
+        return base_model_config_obj
