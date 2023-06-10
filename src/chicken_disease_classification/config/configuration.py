@@ -1,6 +1,7 @@
 from chicken_disease_classification.constants import *
 from chicken_disease_classification.utils.common import read_yaml, create_directories
-from chicken_disease_classification.entity.config_entity import (DataIngestionConfig, BaseModelConfig)
+from chicken_disease_classification.entity.config_entity import (DataIngestionConfig, BaseModelConfig, CallbacksConfig)
+import os
 
 class ConfigurationManager:
     def __init__(
@@ -34,11 +35,11 @@ class ConfigurationManager:
     
     
     def get_base_model_config(self) -> BaseModelConfig:
-
+        
         base_model_config = self.config_file_path.base_model
         # create a sub directory in artifacts -> "base_model"
         create_directories([base_model_config.root_dir])
-
+        
         # create obj of BaseModelConfig class
         base_model_config_obj = BaseModelConfig(
             root_dir = Path(base_model_config.root_dir),
@@ -52,3 +53,21 @@ class ConfigurationManager:
         )
         
         return base_model_config_obj
+    
+    
+    def get_callback_config(self) -> CallbacksConfig:
+        
+        callbacks_config = self.config_file_path.callbacks
+        
+        model_ckpt_dir = os.path.dirname(callbacks_config.model_checkpoint_dir)
+        # create 2 sub directories in artifacts -> model_checkpoint_dir and tensorboard_root_log_dir
+        create_directories([Path(model_ckpt_dir) , Path(callbacks_config.tensorboard_root_log_dir)])
+        
+        # create obj of BaseModelConfig class
+        callbacks_config_obj = CallbacksConfig(
+            root_dir = Path(callbacks_config.root_dir),
+            tensorboard_root_log_dir = Path(callbacks_config.tensorboard_root_log_dir),
+            model_checkpoint_dir = Path(callbacks_config.model_checkpoint_dir)
+        )
+        
+        return callbacks_config_obj
